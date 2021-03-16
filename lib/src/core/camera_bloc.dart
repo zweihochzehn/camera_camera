@@ -11,7 +11,7 @@ class CameraBloc {
   void Function(String value) onPath;
   CameraSide cameraSide;
   List<FlashMode> flashModes;
-  late CameraCameraController _cameraController;
+  CameraCameraController? _cameraController;
 
   CameraBloc({
     required this.service,
@@ -72,7 +72,7 @@ class CameraBloc {
   void startPreview(
     ResolutionPreset resolutionPreset,
   ) async {
-    await _cameraController.dispose();
+    await _cameraController?.dispose();
     await Future.delayed(Duration(milliseconds: 800));
 
     final cameras = status.selected.cameras;
@@ -84,7 +84,7 @@ class CameraBloc {
       flashModes: flashModes,
     );
     status = CameraStatusPreview(
-        controller: _cameraController,
+        controller: _cameraController!,
         cameras: cameras,
         indexSelected: indexSelected);
   }
