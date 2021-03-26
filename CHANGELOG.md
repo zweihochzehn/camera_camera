@@ -1,3 +1,7 @@
+# 2.0.1
+
+- Make `_cameraController` nullable. Fixes #51
+
 # 2.0.0-nullsafety.2
 
 - Add example on nullsafety
