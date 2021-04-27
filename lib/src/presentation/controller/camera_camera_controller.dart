@@ -9,6 +9,7 @@ class CameraCameraController {
   CameraDescription cameraDescription;
   List<FlashMode> flashModes;
   void Function(String path) onPath;
+  bool enableAudio;
 
   late CameraController _controller;
 
@@ -21,8 +22,10 @@ class CameraCameraController {
     required this.cameraDescription,
     required this.flashModes,
     required this.onPath,
+    this.enableAudio = false,
   }) {
-    _controller = CameraController(cameraDescription, resolutionPreset);
+    _controller = CameraController(cameraDescription, resolutionPreset,
+        enableAudio: enableAudio);
   }
 
   void init() async {

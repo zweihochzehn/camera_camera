@@ -12,12 +12,14 @@ class CameraBloc {
   CameraSide cameraSide;
   List<FlashMode> flashModes;
   CameraCameraController? _cameraController;
+  bool enableAudio;
 
   CameraBloc({
     required this.service,
     required this.onPath,
     required this.cameraSide,
     required this.flashModes,
+    this.enableAudio = false,
   });
 
   //STREAM STATUS
@@ -82,6 +84,7 @@ class CameraBloc {
       resolutionPreset: resolutionPreset,
       onPath: onPath,
       flashModes: flashModes,
+      enableAudio: enableAudio,
     );
     status = CameraStatusPreview(
         controller: _cameraController!,
