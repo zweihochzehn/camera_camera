@@ -1,3 +1,6 @@
+# 2.0.2
+
+- Added option not to use audio. Fixes #62
 # 2.0.1
 
 - Make `_cameraController` nullable. Fixes #51
