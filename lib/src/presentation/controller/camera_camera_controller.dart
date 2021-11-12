@@ -142,9 +142,11 @@ class CameraCameraController {
   }
 
   void takePhoto() async {
-    final file = await _controller.takePicture();
+    try {
+      final file = await _controller.takePicture();
 
-    onPath(file.path);
+      onPath(file.path);
+    } catch (e) {}
   }
 
   Widget buildPreview() => _controller.buildPreview();
