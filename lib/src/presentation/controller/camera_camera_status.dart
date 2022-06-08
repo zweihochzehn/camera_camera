@@ -13,10 +13,10 @@ class CameraCameraLoading extends CameraCameraStatus {
 
 class CameraCameraFailure extends CameraCameraStatus {
   String message;
-  CameraException exception;
+  CameraException? exception;
   CameraCameraFailure({
     required this.message,
-    required this.exception,
+    this.exception,
   });
 }
 

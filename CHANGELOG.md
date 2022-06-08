@@ -1,3 +1,7 @@
+# 3.0.0
+- Update all dependencies 
+- Removed RxDart and use now ChangeNotifier
+
 # 2.0.2
 
 - Added option not to use audio. Fixes #62

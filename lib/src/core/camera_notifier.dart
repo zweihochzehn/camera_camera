@@ -1,33 +1,44 @@
 import 'package:camera/camera.dart';
 import 'package:camera_camera/src/presentation/controller/camera_camera_controller.dart';
+import 'package:camera_camera/src/shared/entities/camera_mode.dart';
 import 'package:camera_camera/src/shared/entities/camera_side.dart';
-import 'package:rxdart/subjects.dart';
+import 'package:flutter/material.dart';
 
 import 'camera_service.dart';
 import 'camera_status.dart';
 
-class CameraBloc {
+class CameraNotifier extends ChangeNotifier {
   CameraService service;
   void Function(String value) onPath;
   CameraSide cameraSide;
   List<FlashMode> flashModes;
   CameraCameraController? _cameraController;
   bool enableAudio;
+  final CameraMode mode;
 
-  CameraBloc({
+  CameraNotifier({
     required this.service,
     required this.onPath,
     required this.cameraSide,
     required this.flashModes,
+    required this.mode,
     this.enableAudio = false,
   });
 
   //STREAM STATUS
-  final statusStream =
-      BehaviorSubject<CameraStatus>.seeded(CameraStatusEmpty());
-  CameraStatus get status =>
-      statusStream.valueWrapper?.value ?? CameraStatusEmpty();
-  set status(CameraStatus status) => statusStream.sink.add(status);
+  CameraStatus _status = CameraStatusEmpty();
+
+  CameraStatus get status => _status;
+  set status(CameraStatus status) {
+    _status = status;
+    notifyListeners();
+  }
+
+  listen(Function(CameraStatus) onListen) {
+    addListener(() {
+      onListen(status);
+    });
+  }
 
   void init() async {
     await getAvailableCameras();
@@ -85,6 +96,7 @@ class CameraBloc {
       onPath: onPath,
       flashModes: flashModes,
       enableAudio: enableAudio,
+      cameraMode: mode,
     );
     status = CameraStatusPreview(
         controller: _cameraController!,
@@ -93,6 +105,6 @@ class CameraBloc {
   }
 
   void dispose() {
-    statusStream.close();
+    super.dispose();
   }
 }

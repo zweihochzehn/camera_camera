@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
-import 'package:camera_camera/src/core/camera_bloc.dart';
+import 'package:camera_camera/src/core/camera_notifier.dart';
 import 'package:camera_camera/src/core/camera_service.dart';
 import 'package:camera_camera/src/core/camera_status.dart';
 import 'package:camera_camera/src/presentation/widgets/camera_preview.dart';
+import 'package:camera_camera/src/shared/entities/camera_mode.dart';
 import 'package:camera_camera/src/shared/entities/camera_side.dart';
 import 'package:flutter/material.dart';
 
@@ -29,12 +30,16 @@ class CameraCamera extends StatefulWidget {
   ///permission on Android
   final bool enableAudio;
 
+  //You can define your prefered aspect ratio, 1:1, 16:9, 4:3 or full screen
+  final CameraMode mode;
+
   CameraCamera({
     Key? key,
     this.resolutionPreset = ResolutionPreset.ultraHigh,
     required this.onFile,
     this.cameraSide = CameraSide.all,
     this.flashModes = FlashMode.values,
+    this.mode = CameraMode.ratio16s9,
     this.enableZoom = true,
     this.enableAudio = false,
   }) : super(key: key);
@@ -44,34 +49,32 @@ class CameraCamera extends StatefulWidget {
 }
 
 class _CameraCameraState extends State<CameraCamera> {
-  late CameraBloc bloc;
-  late StreamSubscription _subscription;
+  late CameraNotifier controller = CameraNotifier(
+    flashModes: widget.flashModes,
+    service: CameraServiceImpl(),
+    onPath: (path) => widget.onFile(File(path)),
+    cameraSide: widget.cameraSide,
+    enableAudio: widget.enableAudio,
+    mode: widget.mode,
+  );
+
   @override
   void initState() {
-    bloc = CameraBloc(
-      flashModes: widget.flashModes,
-      service: CameraServiceImpl(),
-      onPath: (path) => widget.onFile(File(path)),
-      cameraSide: widget.cameraSide,
-      enableAudio: widget.enableAudio,
-    );
-    bloc.init();
-    _subscription = bloc.statusStream.listen((state) {
+    controller.listen((state) {
       return state.when(
           orElse: () {},
           selected: (camera) async {
-            bloc.startPreview(widget.resolutionPreset);
+            controller.startPreview(widget.resolutionPreset);
           });
     });
+    controller.init();
     super.initState();
   }
 
   @override
   void dispose() {
-    bloc.dispose();
+    controller.dispose();
     //SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
-
-    _subscription.cancel();
     super.dispose();
   }
 
@@ -79,48 +82,50 @@ class _CameraCameraState extends State<CameraCamera> {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.black,
-      child: StreamBuilder<CameraStatus>(
-        stream: bloc.statusStream,
-        initialData: CameraStatusEmpty(),
-        builder: (_, snapshot) => snapshot.data!.when(
-            preview: (controller) => Stack(
-                  children: [
-                    CameraCameraPreview(
-                      enableZoom: widget.enableZoom,
-                      key: UniqueKey(),
-                      controller: controller,
-                    ),
-                    if (bloc.status.preview.cameras.length > 1)
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: Padding(
-                          padding: const EdgeInsets.all(32.0),
-                          child: InkWell(
-                            onTap: () {
-                              bloc.changeCamera();
-                            },
-                            child: CircleAvatar(
-                              radius: 20,
-                              backgroundColor: Colors.black.withOpacity(0.6),
-                              child: Icon(
-                                Platform.isAndroid
-                                    ? Icons.flip_camera_android
-                                    : Icons.flip_camera_ios,
-                                color: Colors.white,
+      child: SafeArea(
+        child: AnimatedBuilder(
+          animation: controller,
+          builder: (_, __) => controller.status.when(
+              preview: (controller) => Stack(
+                    children: [
+                      CameraCameraPreview(
+                        enableZoom: widget.enableZoom,
+                        key: UniqueKey(),
+                        controller: controller,
+                      ),
+                      if (this.controller.status.preview.cameras.length > 1)
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(bottom: 32, right: 64),
+                            child: InkWell(
+                              onTap: () {
+                                this.controller.changeCamera();
+                              },
+                              child: CircleAvatar(
+                                radius: 20,
+                                backgroundColor: Colors.black.withOpacity(0.6),
+                                child: Icon(
+                                  Platform.isAndroid
+                                      ? Icons.flip_camera_android
+                                      : Icons.flip_camera_ios,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      )
-                  ],
-                ),
-            failure: (message, _) => Container(
-                  color: Colors.black,
-                  child: Text(message),
-                ),
-            orElse: () => Container(
-                  color: Colors.black,
-                )),
+                        )
+                    ],
+                  ),
+              failure: (message, _) => Container(
+                    color: Colors.black,
+                    child: Text(message),
+                  ),
+              orElse: () => Container(
+                    color: Colors.black,
+                  )),
+        ),
       ),
     );
   }

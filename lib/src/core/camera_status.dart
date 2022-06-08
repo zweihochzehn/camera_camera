@@ -1,9 +1,21 @@
 import 'package:camera/camera.dart';
 import 'package:camera_camera/src/presentation/controller/camera_camera_controller.dart';
 
-abstract class CameraStatus {}
+abstract class CameraStatus {
+  @override
+  int get hashCode;
 
-class CameraStatusEmpty extends CameraStatus {}
+  @override
+  bool operator ==(Object other);
+}
+
+class CameraStatusEmpty extends CameraStatus {
+  @override
+  int get hashCode => "CameraStatusEmpty".hashCode;
+
+  @override
+  bool operator ==(Object other) => super.hashCode == other.hashCode;
+}
 
 class CameraStatusFailure extends CameraStatus {
   String message;
@@ -15,10 +27,21 @@ class CameraStatusFailure extends CameraStatus {
 
   @override
   String toString() => 'CameraStatusFailure(message: $message, error: $error)';
+
+  @override
+  int get hashCode => "CameraStatusFailure".hashCode + message.hashCode;
+
+  @override
+  bool operator ==(Object other) => super.hashCode == other.hashCode;
 }
 
 class CameraStatusLoading extends CameraStatus {
   CameraStatusLoading();
+  @override
+  int get hashCode => "CameraStatusLoading".hashCode;
+
+  @override
+  bool operator ==(Object other) => super.hashCode == other.hashCode;
 }
 
 class CameraStatusSuccess extends CameraStatus {
@@ -26,6 +49,12 @@ class CameraStatusSuccess extends CameraStatus {
   CameraStatusSuccess({
     required this.cameras,
   });
+
+  @override
+  int get hashCode => "CameraStatusSuccess".hashCode + cameras.hashCode;
+
+  @override
+  bool operator ==(Object other) => super.hashCode == other.hashCode;
 }
 
 class CameraStatusSelected extends CameraStatus {
@@ -37,6 +66,13 @@ class CameraStatusSelected extends CameraStatus {
   });
 
   CameraDescription get actual => cameras[indexSelected];
+
+  @override
+  int get hashCode =>
+      "CameraStatusSelected".hashCode + cameras.hashCode + indexSelected;
+
+  @override
+  bool operator ==(Object other) => super.hashCode == other.hashCode;
 }
 
 class CameraStatusPreview extends CameraStatus {
@@ -49,6 +85,13 @@ class CameraStatusPreview extends CameraStatus {
     required this.cameras,
     required this.indexSelected,
   });
+
+  @override
+  int get hashCode =>
+      "CameraStatusPreview".hashCode + cameras.hashCode + indexSelected;
+
+  @override
+  bool operator ==(Object other) => super.hashCode == other.hashCode;
 }
 
 extension CameraStatusExt on CameraStatus {

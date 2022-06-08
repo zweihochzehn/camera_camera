@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:camera_camera/src/shared/entities/camera.dart';
+import 'package:camera_camera/src/shared/entities/camera_mode.dart';
 import 'package:flutter/material.dart';
 
 import 'camera_camera_status.dart';
@@ -7,6 +8,7 @@ import 'camera_camera_status.dart';
 class CameraCameraController {
   ResolutionPreset resolutionPreset;
   CameraDescription cameraDescription;
+  CameraMode cameraMode;
   List<FlashMode> flashModes;
   void Function(String path) onPath;
   bool enableAudio;
@@ -22,11 +24,14 @@ class CameraCameraController {
     required this.cameraDescription,
     required this.flashModes,
     required this.onPath,
+    this.cameraMode = CameraMode.ratio16s9,
     this.enableAudio = false,
   }) {
     _controller = CameraController(cameraDescription, resolutionPreset,
         enableAudio: enableAudio);
   }
+
+  double get aspectRatio => _controller.value.aspectRatio;
 
   void init() async {
     status = CameraCameraLoading();
@@ -38,7 +43,11 @@ class CameraCameraController {
       final minExposure = await _controller.getMinExposureOffset();
       try {
         await _controller.setFlashMode(FlashMode.off);
-      } catch (e) {}
+      } catch (e) {
+        status = CameraCameraFailure(
+          message: e.toString(),
+        );
+      }
 
       status = CameraCameraSuccess(
           camera: Camera(
@@ -143,10 +152,15 @@ class CameraCameraController {
 
   void takePhoto() async {
     try {
-      final file = await _controller.takePicture();
+      if (_controller.value.isInitialized &&
+          !_controller.value.isTakingPicture) {
+        final file = await _controller.takePicture();
 
-      onPath(file.path);
-    } catch (e) {}
+        onPath(file.path);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   Widget buildPreview() => _controller.buildPreview();
