@@ -1,9 +1,10 @@
-# Camera_Camera 2.0
+# Camera_Camera 3.0
 
 ## New Features!
 
 - Add Feature Zoom!
 - Add Feature FlashMode
+- Add Support from Web!
 - Add Feature Change Camera, and seletec the CameraSide your prefer activated!
 - CallBack for return File your photo, onFile(File yourFile)
 - Removed return using Navigator.pop(context,file)
@@ -80,14 +81,17 @@ return Scaffold(
 );
 ```
 
-## Roadmap 2.0
+## Roadmap 3.0
 
 | Feature               | Progress |
 | :-------------------- | :------: |
 | Zoom                  |    ✅    |
 | Flash                 |    ✅    |
 | CameraSide select     |    ✅    |
-| nullsafety support    |    ✅    |
+| Nullsafety support    |    ✅    |
+| Web support (beta)    |    ✅    |
+| Desktop support       |          |
+| Custom Layouts        |          |
 | Add Exposure controll |          |
 | Add Easy Mode Video   |          |
 | Add Gallery           |          |

@@ -59,7 +59,7 @@ class _CameraCameraPreviewState extends State<CameraCameraPreview> {
                         ),
                       ),
                     ],
-                    if (widget.enableZoom)
+                    if (camera.zoom != null && widget.enableZoom)
                       Positioned(
                         bottom: 116,
                         left: 0.0,
@@ -70,7 +70,7 @@ class _CameraCameraPreviewState extends State<CameraCameraPreview> {
                           child: IconButton(
                             icon: Center(
                               child: Text(
-                                "${camera.zoom.toStringAsFixed(1)}x",
+                                "${camera.zoom?.toStringAsFixed(1)}x",
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 12),
                               ),

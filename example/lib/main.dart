@@ -1,5 +1,7 @@
 import 'dart:io';
+
 import 'package:camera_camera/camera_camera.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Camera Camera 2.0'),
+      home: MyHomePage(title: 'Camera Camera 3.0'),
     );
   }
 }
@@ -60,10 +62,12 @@ class _MyHomePageState extends State<MyHomePage> {
           padding: const EdgeInsets.all(8.0),
           child: Container(
             width: size.width,
-            child: Image.file(
-              photos[index],
-              fit: BoxFit.cover,
-            ),
+            child: kIsWeb
+                ? Image.network(photos[index].path)
+                : Image.file(
+                    photos[index],
+                    fit: BoxFit.cover,
+                  ),
           ),
         ),
       ),

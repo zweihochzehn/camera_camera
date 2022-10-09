@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -8,6 +7,7 @@ import 'package:camera_camera/src/core/camera_status.dart';
 import 'package:camera_camera/src/presentation/widgets/camera_preview.dart';
 import 'package:camera_camera/src/shared/entities/camera_mode.dart';
 import 'package:camera_camera/src/shared/entities/camera_side.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class CameraCamera extends StatefulWidget {
@@ -78,6 +78,17 @@ class _CameraCameraState extends State<CameraCamera> {
     super.dispose();
   }
 
+  Widget getIconByPlatform() {
+    if (kIsWeb) {
+      return Icon(Icons.flip_camera_android);
+    }
+    if (Platform.isAndroid) {
+      return Icon(Icons.flip_camera_android);
+    } else {
+      return Icon(Icons.flip_camera_ios);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -106,12 +117,7 @@ class _CameraCameraState extends State<CameraCamera> {
                               child: CircleAvatar(
                                 radius: 20,
                                 backgroundColor: Colors.black.withOpacity(0.6),
-                                child: Icon(
-                                  Platform.isAndroid
-                                      ? Icons.flip_camera_android
-                                      : Icons.flip_camera_ios,
-                                  color: Colors.white,
-                                ),
+                                child: getIconByPlatform(),
                               ),
                             ),
                           ),
