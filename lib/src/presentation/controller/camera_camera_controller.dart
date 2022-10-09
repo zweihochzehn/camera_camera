@@ -1,5 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:camera_camera/src/shared/entities/camera.dart';
+import 'package:camera_camera/src/shared/entities/camera_mode.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -8,6 +10,7 @@ import 'camera_camera_status.dart';
 class CameraCameraController {
   ResolutionPreset resolutionPreset;
   CameraDescription cameraDescription;
+  CameraMode cameraMode;
   List<FlashMode> flashModes;
   void Function(String path) onPath;
   bool enableAudio;
@@ -23,23 +26,36 @@ class CameraCameraController {
     required this.cameraDescription,
     required this.flashModes,
     required this.onPath,
+    this.cameraMode = CameraMode.ratio16s9,
     this.enableAudio = false,
   }) {
     _controller = CameraController(cameraDescription, resolutionPreset,
         enableAudio: enableAudio);
   }
 
+  double get aspectRatio => _controller.value.aspectRatio;
+
   void init() async {
     status = CameraCameraLoading();
     try {
       await _controller.initialize();
-      final maxZoom = await _controller.getMaxZoomLevel();
-      final minZoom = await _controller.getMinZoomLevel();
-      final maxExposure = await _controller.getMaxExposureOffset();
-      final minExposure = await _controller.getMinExposureOffset();
+      var maxZoom;
+      var minZoom;
+      var maxExposure;
+      var minExposure;
+      if (kIsWeb == false) {
+        maxZoom = await _controller.getMaxZoomLevel();
+        minZoom = await _controller.getMinZoomLevel();
+        maxExposure = await _controller.getMaxExposureOffset();
+        minExposure = await _controller.getMinExposureOffset();
+      }
       try {
         await _controller.setFlashMode(FlashMode.off);
-      } catch (e) {}
+      } catch (e) {
+        status = CameraCameraFailure(
+          message: e.toString(),
+        );
+      }
 
       status = CameraCameraSuccess(
           camera: Camera(
@@ -97,60 +113,79 @@ class CameraCameraController {
   }
 
   void setZoomLevel(double zoom) async {
-    if (zoom != 1) {
-      var cameraZoom = double.parse(((zoom)).toStringAsFixed(1));
-      if (cameraZoom >= status.camera.minZoom &&
-          cameraZoom <= status.camera.maxZoom) {
-        final camera = status.camera.copyWith(zoom: cameraZoom);
-        status = CameraCameraSuccess(camera: camera);
-        await _controller.setZoomLevel(cameraZoom);
+    if (status.camera.zoom != null &&
+        status.camera.minZoom != null &&
+        status.camera.maxZoom != null) {
+      if (zoom != 1) {
+        var cameraZoom = double.parse(((zoom)).toStringAsFixed(1));
+        if (cameraZoom >= status.camera.minZoom! &&
+            cameraZoom <= status.camera.maxZoom!) {
+          final camera = status.camera.copyWith(zoom: cameraZoom);
+          status = CameraCameraSuccess(camera: camera);
+          await _controller.setZoomLevel(cameraZoom);
+        }
       }
     }
   }
 
   void zoomChange() async {
-    var zoom = status.camera.zoom;
-    if (zoom + 0.5 <= status.camera.maxZoom) {
-      zoom += 0.5;
-    } else {
-      zoom = 1.0;
-    }
-    final camera = status.camera.copyWith(zoom: zoom);
-    status = CameraCameraSuccess(camera: camera);
-    await _controller.setZoomLevel(zoom);
-  }
-
-  void zoomIn() async {
-    var zoom = status.camera.zoom;
-    if (zoom + 1 <= status.camera.maxZoom) {
-      zoom += 1;
-
+    if (status.camera.zoom != null &&
+        status.camera.minZoom != null &&
+        status.camera.maxZoom != null) {
+      var zoom = status.camera.zoom!;
+      if (zoom + 0.5 <= status.camera.maxZoom!) {
+        zoom += 0.5;
+      } else {
+        zoom = 1.0;
+      }
       final camera = status.camera.copyWith(zoom: zoom);
       status = CameraCameraSuccess(camera: camera);
       await _controller.setZoomLevel(zoom);
+    }
+  }
+
+  void zoomIn() async {
+    if (status.camera.zoom != null &&
+        status.camera.minZoom != null &&
+        status.camera.maxZoom != null) {
+      var zoom = status.camera.zoom!;
+      if (zoom + 1 <= status.camera.maxZoom!) {
+        zoom += 1;
+
+        final camera = status.camera.copyWith(zoom: zoom);
+        status = CameraCameraSuccess(camera: camera);
+        await _controller.setZoomLevel(zoom);
+      }
     }
   }
 
   void zoomOut() async {
-    var zoom = status.camera.zoom;
-    if (zoom - 1 >= status.camera.minZoom) {
-      zoom -= 1;
+    if (status.camera.zoom != null &&
+        status.camera.minZoom != null &&
+        status.camera.maxZoom != null) {
+      var zoom = status.camera.zoom!;
+      if (zoom - 1 >= status.camera.minZoom!) {
+        zoom -= 1;
 
-      final camera = status.camera.copyWith(zoom: zoom);
-      status = CameraCameraSuccess(camera: camera);
-      await _controller.setZoomLevel(zoom);
+        final camera = status.camera.copyWith(zoom: zoom);
+        status = CameraCameraSuccess(camera: camera);
+        await _controller.setZoomLevel(zoom);
+      }
     }
   }
 
   void takePhoto() async {
     try {
-      final file = await _controller.takePicture();
+      if (_controller.value.isInitialized &&
+          !_controller.value.isTakingPicture) {
+        final file = await _controller.takePicture();
 
-      onPath(file.path);
-    } catch (e) {}
+        onPath(file.path);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
-
-  double get aspectRatio => _controller.value.aspectRatio;
 
   Widget buildPreview() => _controller.buildPreview();
 

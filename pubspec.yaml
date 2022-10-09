@@ -1,23 +1,25 @@
 name: camera_camera
 description: The easy plugin camera for your project, platforms Android and iOS.
-version: 2.0.2
+version: 3.0.0-dev
 repository: https://github.com/gabuldev/camera_camera
 homepage: https://gabul.dev/
+publish_to:
+funding: 
+  - https://www.paypal.com/donate/?hosted_button_id=J47TEPBAXMB9N
 
 environment:
   sdk: ">=2.12.0-0.0 <3.0.0"
 
 dependencies:
-  camera: ^0.9.4+5 
-  font_awesome_flutter: ^9.0.0-nullsafety
-  rxdart: ^0.26.0
+  camera: ^0.10.0+3
+  font_awesome_flutter: ^10.2.1
   flutter:
     sdk: flutter
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  mocktail: ^0.0.1-dev.11
+  mocktail: ^0.3.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec

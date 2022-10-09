@@ -1,3 +1,8 @@
+# 3.0.0-dev
+- Update all dependencies 
+- Removed RxDart and use now ChangeNotifier
+- Add preview support from Web
+
 # 2.0.2
 
 - Added option not to use audio. Fixes #62

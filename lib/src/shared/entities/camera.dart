@@ -3,23 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Camera {
-  final double maxZoom;
-  final double minZoom;
+  final double? maxZoom;
+  final double? minZoom;
   final double? maxExposure;
   final double? minExposure;
   final double? exposureOffset;
-  final double zoom;
+  final double? zoom;
   final FlashMode? flashMode;
   final ExposureMode? exposureMode;
   final Offset? focusPoint;
   final Offset? exposurePoint;
   Camera({
-    required this.maxZoom,
-    required this.minZoom,
+    this.maxZoom,
+    this.minZoom,
     this.maxExposure,
     this.minExposure,
     this.exposureOffset,
-    required this.zoom,
+    this.zoom,
     this.flashMode,
     this.exposureMode,
     this.focusPoint,
