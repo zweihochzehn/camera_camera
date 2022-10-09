@@ -3,6 +3,7 @@ import 'package:camera_camera/src/shared/entities/camera.dart';
 import 'package:camera_camera/src/shared/entities/camera_mode.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'camera_camera_status.dart';
 
@@ -187,6 +188,14 @@ class CameraCameraController {
   }
 
   Widget buildPreview() => _controller.buildPreview();
+
+  DeviceOrientation getApplicableOrientation() {
+    return _controller.value.isRecordingVideo
+        ? _controller.value.recordingOrientation!
+        : (_controller.value.previewPauseOrientation ??
+            _controller.value.lockedCaptureOrientation ??
+            _controller.value.deviceOrientation);
+  }
 
   Future<void> dispose() async {
     await _controller.dispose();
