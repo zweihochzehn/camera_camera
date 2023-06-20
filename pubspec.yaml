@@ -1,6 +1,6 @@
 name: camera_camera
 description: The easy plugin camera for your project, platforms Android and iOS.
-version: 3.0.0-dev
+version: 3.0.1-dev
 repository: https://github.com/gabuldev/camera_camera
 homepage: https://gabul.dev/
 publish_to:
