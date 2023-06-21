@@ -1,7 +1,6 @@
 import 'package:camera_camera/src/presentation/controller/camera_camera_controller.dart';
 import 'package:camera_camera/src/presentation/controller/camera_camera_status.dart';
 import 'package:camera_camera/src/shared/entities/camera_mode.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -129,22 +128,6 @@ class _CameraCameraPreviewState extends State<CameraCameraPreview> {
                 color: Colors.black,
               )),
     );
-  }
-
-  Widget _wrapInRotatedBox(
-      {required Widget child, required DeviceOrientation orentation}) {
-    if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) {
-      return child;
-    }
-
-    return RotatedBox(
-      quarterTurns: _getQuarterTurns(orentation),
-      child: child,
-    );
-  }
-
-  int _getQuarterTurns(DeviceOrientation orentation) {
-    return turns[orentation]!;
   }
 
   Map<DeviceOrientation, int> turns = {
