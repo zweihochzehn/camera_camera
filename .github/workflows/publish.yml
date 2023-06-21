@@ -1,9 +1,9 @@
 # .github/workflows/publish.yml
 name: Publish to pub.dev
 
-on:
-  push:
-    tags:
+  on:
+    push:
+      tags:
     # must align with the tag-pattern configured on pub.dev, often just replace
     #  with [0-9]+.[0-9]+.[0-9]+*
     - 'v[0-9]+.[0-9]+.[0-9]+*' # tag-pattern on pub.dev: 'v'
@@ -15,6 +15,8 @@ on:
 # Publish using the reusable workflow from dart-lang.
 jobs:
   publish:
+    permissions:
+      id-token: write
     uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
     # with:
     #   working-directory: path/to/package/within/repository
