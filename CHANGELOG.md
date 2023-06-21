@@ -1,6 +1,5 @@
-# 3.0.1-dev
+# 3.0.0
 - Fix exports
-# 3.0.0-dev
 - Update all dependencies 
 - Removed RxDart and use now ChangeNotifier
 - Add preview support from Web
