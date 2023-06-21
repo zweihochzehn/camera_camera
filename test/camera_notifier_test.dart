@@ -3,8 +3,6 @@ import 'package:camera_camera/src/core/camera_notifier.dart';
 import 'package:camera_camera/src/core/camera_service.dart';
 import 'package:camera_camera/src/core/camera_status.dart';
 import 'package:camera_camera/src/presentation/controller/camera_camera_controller.dart';
-import 'package:camera_camera/src/shared/entities/camera_mode.dart';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -118,15 +116,9 @@ void main() {
       expect(controller.status.selected.indexSelected, 1);
     });
 
-//TODO: RESOLVER ESSE TESTE
     test("changeCamera for next camera and return index 0", () async {
       when(() => service.getCameras()).thenAnswer((_) => Future.value(cameras));
-      final actual = [
-        CameraStatusLoading(),
-        CameraStatusSuccess(cameras: cameras),
-        CameraStatusSelected(cameras: cameras, indexSelected: 0),
-        CameraStatusSelected(cameras: cameras, indexSelected: 1),
-      ];
+
       final matcher = <CameraStatus>[];
       controller.listen((state) {
         matcher.add(state);
