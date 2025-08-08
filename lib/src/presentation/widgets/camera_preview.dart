@@ -65,20 +65,24 @@ class _CameraCameraPreviewState extends State<CameraCameraPreview> {
                         bottom: 116,
                         left: 0.0,
                         right: 0.0,
-                        child: CircleAvatar(
-                          radius: 20,
-                          backgroundColor: Colors.black.withOpacity(0.6),
-                          child: IconButton(
-                            icon: Center(
-                              child: Text(
-                                "${camera.zoom?.toStringAsFixed(1)}x",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 12),
+                        child: Semantics(
+                          label: 'Zoom einstellen',
+                          excludeSemantics: true,
+                          child: CircleAvatar(
+                            radius: 20,
+                            backgroundColor: Colors.black.withOpacity(0.6),
+                            child: IconButton(
+                              icon: Center(
+                                child: Text(
+                                  "${camera.zoom?.toStringAsFixed(1)}x",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 12),
+                                ),
                               ),
+                              onPressed: () {
+                                widget.controller.zoomChange();
+                              },
                             ),
-                            onPressed: () {
-                              widget.controller.zoomChange();
-                            },
                           ),
                         ),
                       ),
@@ -87,16 +91,21 @@ class _CameraCameraPreviewState extends State<CameraCameraPreview> {
                         alignment: Alignment.bottomLeft,
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 32, left: 64),
-                          child: CircleAvatar(
-                            radius: 20,
-                            backgroundColor: Colors.black.withOpacity(0.6),
-                            child: IconButton(
-                              onPressed: () {
-                                widget.controller.changeFlashMode();
-                              },
-                              icon: Icon(
-                                camera.flashModeIcon,
-                                color: Colors.white,
+                          child: Semantics(
+                            label: 'Taschenlampe',
+                            excludeSemantics: true,
+                            button: true,
+                            child: CircleAvatar(
+                              radius: 20,
+                              backgroundColor: Colors.black.withOpacity(0.6),
+                              child: IconButton(
+                                onPressed: () {
+                                  widget.controller.changeFlashMode();
+                                },
+                                icon: Icon(
+                                  camera.flashModeIcon,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
@@ -106,13 +115,18 @@ class _CameraCameraPreviewState extends State<CameraCameraPreview> {
                       alignment: Alignment.bottomCenter,
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 32),
-                        child: InkWell(
-                          onTap: () {
-                            widget.controller.takePhoto();
-                          },
-                          child: CircleAvatar(
-                            radius: 30,
-                            backgroundColor: Colors.white,
+                        child: Semantics(
+                          label: 'Auslöser',
+                          button: true,
+                          excludeSemantics: true,
+                          child: InkWell(
+                            onTap: () {
+                              widget.controller.takePhoto();
+                            },
+                            child: CircleAvatar(
+                              radius: 30,
+                              backgroundColor: Colors.white,
+                            ),
                           ),
                         ),
                       ),
