@@ -33,6 +33,15 @@ class CameraCamera extends StatefulWidget {
   //You can define your prefered aspect ratio, 1:1, 16:9, 4:3 or full screen
   final CameraMode mode;
 
+  ///Whether to show the flash button
+  final bool showFlashButton;
+
+  ///Whether to show the zoom button
+  final bool showZoomButton;
+
+  ///Whether to show the camera switch button
+  final bool showCameraSwitchButton;
+
   CameraCamera({
     Key? key,
     this.resolutionPreset = ResolutionPreset.ultraHigh,
@@ -42,6 +51,9 @@ class CameraCamera extends StatefulWidget {
     this.mode = CameraMode.ratio16s9,
     this.enableZoom = true,
     this.enableAudio = false,
+    this.showFlashButton = false,
+    this.showZoomButton = false,
+    this.showCameraSwitchButton = false,
   }) : super(key: key);
 
   @override
@@ -104,7 +116,7 @@ class _CameraCameraState extends State<CameraCamera> {
                         key: UniqueKey(),
                         controller: controller,
                       ),
-                      if (this.controller.status.preview.cameras.length > 1)
+                      if (this.controller.status.preview.cameras.length > 1 && widget.showCameraSwitchButton)
                         Align(
                           alignment: Alignment.bottomRight,
                           child: Padding(

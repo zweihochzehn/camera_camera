@@ -14,6 +14,9 @@ class CameraCameraController {
   List<FlashMode> flashModes;
   void Function(String path) onPath;
   bool enableAudio;
+  bool showFlashButton;
+  bool showZoomButton;
+  bool showCameraSwitchButton;
 
   late CameraController _controller;
 
@@ -26,6 +29,9 @@ class CameraCameraController {
     required this.cameraDescription,
     required this.flashModes,
     required this.onPath,
+    required this.showFlashButton,
+    required this.showZoomButton,
+    required this.showCameraSwitchButton, 
     this.cameraMode = CameraMode.ratio16s9,
     this.enableAudio = false,
   }) {
@@ -48,17 +54,7 @@ class CameraCameraController {
         minZoom = await _controller.getMinZoomLevel();
         maxExposure = await _controller.getMaxExposureOffset();
         minExposure = await _controller.getMinExposureOffset();
-      } else {
-        // For web compatibility, set default values
-        maxZoom = 10.0;
-        minZoom = 1.0;
-        maxExposure = 2.0;
-        minExposure = -2.0;
-        print("Web platform detected - using default zoom values");
       }
-      
-      print("Camera initialization - maxZoom: $maxZoom, minZoom: $minZoom, flashModes: $flashModes");
-      
       try {
         await _controller.setFlashMode(FlashMode.off);
       } catch (e) {

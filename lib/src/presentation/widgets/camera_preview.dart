@@ -60,7 +60,7 @@ class _CameraCameraPreviewState extends State<CameraCameraPreview> {
                         ),
                       ),
                     ],
-                    if (camera.zoom != null && widget.enableZoom)
+                    if (camera.zoom != null && widget.enableZoom && widget.controller.showZoomButton)
                       Positioned(
                         bottom: 116,
                         left: 0.0,
@@ -86,13 +86,14 @@ class _CameraCameraPreviewState extends State<CameraCameraPreview> {
                           ),
                         ),
                       ),
-                    if (widget.controller.flashModes.length > 1)
+                    if (widget.controller.flashModes.length > 1 &&
+                        widget.controller.showFlashButton)
                       Align(
                         alignment: Alignment.bottomLeft,
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 32, left: 64),
                           child: Semantics(
-                            label: 'Taschenlampe',
+                            label: 'Taschenlampe umschalten',
                             excludeSemantics: true,
                             button: true,
                             child: CircleAvatar(
@@ -116,7 +117,7 @@ class _CameraCameraPreviewState extends State<CameraCameraPreview> {
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 32),
                         child: Semantics(
-                          label: 'Auslöser',
+                          label: 'Auslöser für Foto',
                           button: true,
                           excludeSemantics: true,
                           child: InkWell(
