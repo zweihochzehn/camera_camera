@@ -65,12 +65,12 @@ class _CameraCameraPreviewState extends State<CameraCameraPreview> {
                         bottom: 116,
                         left: 0.0,
                         right: 0.0,
-                        child: Semantics(
-                          label: 'Zoom einstellen',
-                          excludeSemantics: true,
-                          child: CircleAvatar(
-                            radius: 20,
-                            backgroundColor: Colors.black.withOpacity(0.6),
+                        child: CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.black.withOpacity(0.6),
+                          child: Semantics(
+                            label: 'Zoom einstellen',
+                            excludeSemantics: true,
                             child: IconButton(
                               icon: Center(
                                 child: Text(

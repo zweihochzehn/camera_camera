@@ -48,7 +48,17 @@ class CameraCameraController {
         minZoom = await _controller.getMinZoomLevel();
         maxExposure = await _controller.getMaxExposureOffset();
         minExposure = await _controller.getMinExposureOffset();
+      } else {
+        // For web compatibility, set default values
+        maxZoom = 10.0;
+        minZoom = 1.0;
+        maxExposure = 2.0;
+        minExposure = -2.0;
+        print("Web platform detected - using default zoom values");
       }
+      
+      print("Camera initialization - maxZoom: $maxZoom, minZoom: $minZoom, flashModes: $flashModes");
+      
       try {
         await _controller.setFlashMode(FlashMode.off);
       } catch (e) {
