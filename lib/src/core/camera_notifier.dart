@@ -14,6 +14,9 @@ class CameraNotifier extends ChangeNotifier {
   List<FlashMode> flashModes;
   CameraCameraController? _cameraController;
   bool enableAudio;
+  bool showFlashButton;
+  bool showZoomButton;
+  bool showCameraSwitchButton;
   final CameraMode mode;
 
   CameraNotifier({
@@ -23,6 +26,9 @@ class CameraNotifier extends ChangeNotifier {
     required this.flashModes,
     required this.mode,
     this.enableAudio = false,
+    this.showFlashButton = false,
+    this.showZoomButton = false,
+    this.showCameraSwitchButton = false,
   });
 
   //STREAM STATUS
@@ -97,6 +103,9 @@ class CameraNotifier extends ChangeNotifier {
       flashModes: flashModes,
       enableAudio: enableAudio,
       cameraMode: mode,
+      showFlashButton: showFlashButton,
+      showZoomButton: showZoomButton,
+      showCameraSwitchButton: showCameraSwitchButton,
     );
     status = CameraStatusPreview(
         controller: _cameraController!,

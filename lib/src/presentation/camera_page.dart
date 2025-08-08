@@ -68,6 +68,9 @@ class _CameraCameraState extends State<CameraCamera> {
     cameraSide: widget.cameraSide,
     enableAudio: widget.enableAudio,
     mode: widget.mode,
+    showFlashButton: widget.showFlashButton,
+    showZoomButton: widget.showZoomButton,
+    showCameraSwitchButton: widget.showCameraSwitchButton,
   );
 
   @override

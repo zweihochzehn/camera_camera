@@ -30,7 +30,10 @@ void main() {
         onPath: onFile,
         cameraSide: CameraSide.all,
         flashModes: [FlashMode.off],
-        mode: CameraMode.ratio16s9);
+        mode: CameraMode.ratio16s9,
+        showFlashButton: false,
+        showZoomButton: false,
+        showCameraSwitchButton: false);
   });
 
   group("Test CameraNotifier", () {
@@ -101,7 +104,10 @@ void main() {
                       onPath: print,
                       flashModes: [],
                       cameraDescription: cameras[0],
-                      resolutionPreset: ResolutionPreset.high),
+                      resolutionPreset: ResolutionPreset.high,
+                      showFlashButton: false,
+                      showZoomButton: false,
+                      showCameraSwitchButton: false),
                   cameras: cameras,
                   indexSelected: 0);
               controller.changeCamera(1);
@@ -129,7 +135,10 @@ void main() {
                       onPath: print,
                       flashModes: [],
                       cameraDescription: cameras[0],
-                      resolutionPreset: ResolutionPreset.high),
+                      resolutionPreset: ResolutionPreset.high,
+                      showFlashButton: false,
+                      showZoomButton: false,
+                      showCameraSwitchButton: false),
                   cameras: cameras,
                   indexSelected: 0);
               controller.changeCamera();
