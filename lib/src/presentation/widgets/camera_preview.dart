@@ -137,16 +137,14 @@ class _CameraCameraPreviewState extends State<CameraCameraPreview> {
                                     : Colors.transparent,
                                 width: 2,
                               ),
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(30),
                             ),
-                            child: Semantics(
-                              label: 'Auslöser für Foto',
-                              button: true,
-                              excludeSemantics: true,
-                              child: InkWell(
-                                onTap: () {
-                                  widget.controller.takePhoto();
-                                },
+                            child: FocusScope(
+                              canRequestFocus: false,
+                              child: Semantics(
+                                label: 'Auslöser für Foto',
+                                button: true,
+                                excludeSemantics: true,
                                 child: CircleAvatar(
                                   radius: 30,
                                   backgroundColor: Colors.white,
