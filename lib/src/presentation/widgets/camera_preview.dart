@@ -137,7 +137,7 @@ class _CameraCameraPreviewState extends State<CameraCameraPreview> {
                                     : Colors.transparent,
                                 width: 3,
                               ),
-                              borderRadius: BorderRadius.circular(30),
+                              borderRadius: BorderRadius.circular(33),
                             ),
                             child: FocusScope(
                               canRequestFocus: false,
