@@ -133,9 +133,9 @@ class _CameraCameraPreviewState extends State<CameraCameraPreview> {
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: _hasFocus
-                                    ? Colors.black
+                                    ? Color.fromRGBO(224, 191, 120, 1)
                                     : Colors.transparent,
-                                width: 2,
+                                width: 3,
                               ),
                               borderRadius: BorderRadius.circular(30),
                             ),
@@ -145,9 +145,14 @@ class _CameraCameraPreviewState extends State<CameraCameraPreview> {
                                 label: 'Auslöser für Foto',
                                 button: true,
                                 excludeSemantics: true,
-                                child: CircleAvatar(
-                                  radius: 30,
-                                  backgroundColor: Colors.white,
+                                child: InkWell(
+                                  onTap: () {
+                                    widget.controller.takePhoto();
+                                  },
+                                  child: CircleAvatar(
+                                    radius: 30,
+                                    backgroundColor: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
