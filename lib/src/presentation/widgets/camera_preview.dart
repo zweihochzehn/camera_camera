@@ -20,6 +20,8 @@ class CameraCameraPreview extends StatefulWidget {
 }
 
 class _CameraCameraPreviewState extends State<CameraCameraPreview> {
+  bool _hasFocus = false;
+
   @override
   void initState() {
     widget.controller.init();
@@ -60,7 +62,9 @@ class _CameraCameraPreviewState extends State<CameraCameraPreview> {
                         ),
                       ),
                     ],
-                    if (camera.zoom != null && widget.enableZoom && widget.controller.showZoomButton)
+                    if (camera.zoom != null &&
+                        widget.enableZoom &&
+                        widget.controller.showZoomButton)
                       Positioned(
                         bottom: 116,
                         left: 0.0,
@@ -116,17 +120,38 @@ class _CameraCameraPreviewState extends State<CameraCameraPreview> {
                       alignment: Alignment.bottomCenter,
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 32),
-                        child: Semantics(
-                          label: 'Auslöser für Foto',
-                          button: true,
-                          excludeSemantics: true,
-                          child: InkWell(
-                            onTap: () {
-                              widget.controller.takePhoto();
-                            },
-                            child: CircleAvatar(
-                              radius: 30,
-                              backgroundColor: Colors.white,
+                        child: Focus(
+                          onFocusChange: (hasFocus) {
+                            setState(() {
+                              _hasFocus = hasFocus;
+                            });
+                          },
+                          onKey: handleRawKeyEvent,
+                          onKeyEvent: handleKeyEvent,
+                          child: AnimatedContainer(
+                            duration: Duration(milliseconds: 300),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: _hasFocus
+                                    ? Colors.black
+                                    : Colors.transparent,
+                                width: 2,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Semantics(
+                              label: 'Auslöser für Foto',
+                              button: true,
+                              excludeSemantics: true,
+                              child: InkWell(
+                                onTap: () {
+                                  widget.controller.takePhoto();
+                                },
+                                child: CircleAvatar(
+                                  radius: 30,
+                                  backgroundColor: Colors.white,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -143,6 +168,26 @@ class _CameraCameraPreviewState extends State<CameraCameraPreview> {
                 color: Colors.black,
               )),
     );
+  }
+
+  KeyEventResult handleRawKeyEvent(FocusNode node, RawKeyEvent event) {
+    if (event.logicalKey == LogicalKeyboardKey.enter ||
+        event.logicalKey == LogicalKeyboardKey.space) {
+      widget.controller.takePhoto();
+      return KeyEventResult.handled;
+    }
+    return KeyEventResult.ignored;
+  }
+
+  KeyEventResult handleKeyEvent(FocusNode node, KeyEvent event) {
+    if (event is KeyUpEvent || event is KeyUpEvent) {
+      if (event.logicalKey == LogicalKeyboardKey.enter ||
+          event.logicalKey == LogicalKeyboardKey.space) {
+        widget.controller.takePhoto();
+        return KeyEventResult.handled;
+      }
+    }
+    return KeyEventResult.ignored;
   }
 
   Map<DeviceOrientation, int> turns = {
